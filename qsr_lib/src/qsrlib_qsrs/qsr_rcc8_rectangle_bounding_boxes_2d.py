@@ -122,28 +122,14 @@ class QSR_RCC8_Rectangle_Bounding_Boxes_2D(QSR_Abstractclass):
                  |            b|         |            d|
                  +-------------+         +-------------+
         """
-        
-        # Object 1 Top Left X
-        ax = bb1[0]
-        # Object 1 Top Left Y
-        ay = bb1[1]
-        # Object 2 Top Left X
-        cx = bb2[0]
-        # Object 2 Top Left X
-        cy = bb2[1]
-        # Object 1 Bottom Right X
-        bx = bb1[2]
-        # Object 1 Bottom Right Y
-        by = bb1[3]
-        # Object 2 Bottom Right X
-        dx = bb2[2]
-        # Object 2 Bottom Right Y
-        dy = bb2[3]
-    
+
         # CALCULATE EQ
         # Is object1 equal to object2
         if(bb1 == bb2):
             return "eq"
+
+        ax, ay, bx, by = bb1
+        cx, cy, dx, dy = bb2
     
         # Are objects disconnected?
         # Cond1. If A's left edge is to the right of the B's right edge, - then A is Totally to right Of B
