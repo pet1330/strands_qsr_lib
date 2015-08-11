@@ -86,7 +86,7 @@ class QSR_RCC_Abstractclass(QSR_Abstractclass):
         """Return symmetrical RCC8 relation
             :param bb1: diagonal points coordinates of first bounding box (x1, y1, x2, y2)
             :param bb2: diagonal points coordinates of second bounding box (x1, y1, x2, y2)
-            :param q: quantisation factor
+            :param q: quantisation factor for all objects
             :return: an RCC8 relation from the following:
                 'dc'     bb1 is disconnected from bb2
                 'ec'     bb1 is externally connected with bb2
@@ -112,7 +112,7 @@ class QSR_RCC_Abstractclass(QSR_Abstractclass):
 
         ax, ay, bx, by = bb1
         cx, cy, dx, dy = bb2
-    
+
         # Are objects disconnected?
         # Cond1. If A's left edge is to the right of the B's right edge, - then A is Totally to right Of B
         # Cond2. If A's right edge is to the left of the B's left edge, - then A is Totally to left Of B
@@ -120,42 +120,55 @@ class QSR_RCC_Abstractclass(QSR_Abstractclass):
         # Cond4. If A's bottom edge is above B's top edge, - then A is Totally above B
         
         #    Cond1           Cond2          Cond3         Cond4
-        if (ax > dx+q) or (bx < cx-q) or (ay > dy+q) or (by < cy-q):
+        if (ax-q > dx+q) or (bx+q < cx-q) or (ay-q > dy+q) or (by+q < cy-q):
             return "dc"
-    
-        # Is one object inside the other
+
+        # Is one object inside the other ()
         BinsideA = (ax <= cx) and (ay <= cy) and (bx >= dx) and (by >= dy)
         AinsideB = (ax >= cx) and (ay >= cy) and (bx <= dx) and (by <= dy)
-    
+
         # Do objects share an X or Y (but are not necessarily touching)
-        sameX = (ax == cx or ax == dx or bx == cx or bx == dx)
-        sameY = (ay == cy or ay == dy or by == cy or by == dy)
-    
+        sameX = (abs(ax - cx)<=q) or (abs(ax - dx)<=q) or (abs(bx - cx)<=q) or (abs(bx - dx)<=q)
+        sameY = (abs(ay - cy)<=q) or (abs(ay - dy)<=q) or (abs(by - cy)<=q) or (abs(by - dy)<=q)
+        
         if AinsideB and (sameX or sameY):
             return "tpp"
-    
+
         if BinsideA and (sameX or sameY):
             return "tppi"
-    
+
         if AinsideB:
             return "ntpp"
-    
+
         if BinsideA:
             return "ntppi"
-    
+
+        similarX = (abs(ax - cx)<q) or (abs(ax - dx)<q) or (abs(bx - cx)<q) or (abs(bx - dx)<q)
+        similarY = (abs(ay - cy)<q) or (abs(ay - dy)<q) or (abs(by - cy)<q) or (abs(by - dy)<q)
+
+        # print "SIMILAR XY", similarX, similarY
         # Are objects touching?
         # Cond1. If A's left edge is equal to B's right edge, - then A is to the right of B and touching
         # Cond2. If A's right edge is qual to B's left edge, - then A is to the left of B and touching
         # Cond3. If A's top edge equal to B's bottom edge, - then A is below B and touching
         # Cond4. If A's bottom edge equal to B's top edge, - then A is above B and touching
-    
+
         #    Cond1        Cond2        Cond3        Cond4
-        if (ax == dx) or (bx == cx) or (ay == dy) or (by == cy):
+        
+            # If quantisation overlaps, but bounding boxes do not then edge connected,
+            # include the objects edges, but do not include the quantisation edge
+        if ((cx-q) <= (bx+q)) and ((cx-q) >= (bx)) or \
+           ((dx+q) >= (ax-q)) and ((dx+q) <= (ax)) or \
+           ((cy-q) <= (by+q)) and ((cy-q) >= (by)) or \
+           ((dy+q) >= (ay-q)) and ((dy+q) <= (ay)):
             return "ec"
-    
+
+
+        # if (((ax > dx+q) or (bx < cx-q) or (ay > dy+q) or (by < cy-q))  and (similarX or similarY) and not (sameX or sameY)):
+            
+
         # If none of the other conditions are met, the objects must be parially overlapping
         return "po"
-
 
     @abstractmethod
     def convert_to_current_rcc(self, qsr):
