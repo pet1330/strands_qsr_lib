@@ -17,8 +17,7 @@ from qsrlib_io.world_qsr_trace import *
 class QSR_RCC8_Rectangle_Bounding_Boxes_2D(QSR_RCC_Abstractclass):
     """Make default QSRs and provide an example for others"""
     def __init__(self):
-        self.qsr_type = "rcc8_rectangle_bounding_boxes_2d"  # must be the same that goes in the QSR_Lib.__const_qsrs_available
-        self.qsr_keys = "rcc8"
+        self._unique_id = "rcc8"
 #         'dc'     bb1 is disconnected from bb2
 #         'ec'     bb1 is externally connected with bb2
 #         'po'     bb1 partially overlaps bb2

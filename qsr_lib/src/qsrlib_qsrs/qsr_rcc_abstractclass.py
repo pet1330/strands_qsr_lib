@@ -24,8 +24,6 @@ class QSR_RCC_Abstractclass(QSR_Abstractclass):
     __metaclass__ = ABCMeta
 
     def __init__(self):
-        self.qsr_type = ""
-        self.qsr_keys = ""
         self.all_possible_relations = []
 
     def custom_checks_for_qsrs_for(self, qsrs_for, error_found):
@@ -51,7 +49,7 @@ class QSR_RCC_Abstractclass(QSR_Abstractclass):
         """
         input_data = kwargs["input_data"]
         include_missing_data = kwargs["include_missing_data"]
-        ret = World_QSR_Trace(qsr_type=self.qsr_type)
+        ret = World_QSR_Trace(qsr_type=self._unique_id)
         for t in input_data.get_sorted_timestamps():
             world_state = input_data.trace[t]
             timestamp = world_state.timestamp
@@ -65,7 +63,7 @@ class QSR_RCC_Abstractclass(QSR_Abstractclass):
                     bb1 = world_state.objects[p[0]].return_bounding_box_2d()
                     bb2 = world_state.objects[p[1]].return_bounding_box_2d()
                     qsr = QSR(timestamp=timestamp, between=between,
-                              qsr=self.handle_future(kwargs["future"], self.convert_to_current_rcc(self.__compute_qsr(bb1, bb2)), self.qsr_keys))
+                              qsr=self.handle_future(kwargs["future"], self.convert_to_current_rcc(self.__compute_qsr(bb1, bb2)), self._unique_id))
                     ret.add_qsr(qsr, timestamp)
             else:
                 if include_missing_data:

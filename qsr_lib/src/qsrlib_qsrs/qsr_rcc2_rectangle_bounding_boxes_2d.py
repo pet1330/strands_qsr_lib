@@ -17,8 +17,7 @@ from qsrlib_io.world_qsr_trace import *
 class QSR_RCC2_Rectangle_Bounding_Boxes_2D(QSR_RCC_Abstractclass):
     """Make default QSRs and provide an example for others"""
     def __init__(self):
-        self.qsr_type = "rcc2_rectangle_bounding_boxes_2d"  # must be the same that goes in the QSR_Lib.__const_qsrs_available
-        self.qsr_keys = "rcc2"
+        self._unique_id = "rcc2"
 #         'dc'     bb1 is disconnected from bb2
 #         'c'      bb1 is connected to bb2
         self.all_possible_relations = ["dc", "c"]
