@@ -42,13 +42,13 @@ class QTCHMMAbstractclass(HMMAbstractclass):
 
         # Setting start and end transition probs and pseudo probs
         trans[trans != 1] = 0
-        trans[trans == 0] = 0.00001
+#        trans[trans == 0] = 0.00001
         trans[0] = 1
         trans[:, 0] = 0
         trans[:, -1] = 1
         trans[0, -1] = 0
         trans[-1] = 0
-        trans += np.dot(np.eye(size), 0.00001)
+        trans += np.eye(size) #np.dot(np.eye(size), 0.00001)
         trans[0, 0] = 0
 
         return trans / trans.sum(axis=1).reshape(-1, 1)
@@ -63,7 +63,7 @@ class QTCHMMAbstractclass(HMMAbstractclass):
 
         """
         emi = np.eye(size)
-        emi[emi == 0] = 0.0001
+#        emi[emi == 0] = 0.0001
 
         return emi/emi.sum(axis=1).reshape(-1, 1)
 

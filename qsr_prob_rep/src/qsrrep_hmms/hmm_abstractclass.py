@@ -3,6 +3,7 @@
 from abc import abstractmethod, ABCMeta
 import numpy as np
 import ghmm as gh
+from copy import deepcopy
 
 
 class HMMAbstractclass():
@@ -161,6 +162,26 @@ class HMMAbstractclass():
         )
         print '\tTraining...'
         hmm.baumWelch(self._create_sequence_set(seq, symbols))
+
+        print '\tAdding pseudo transitions...'
+        pseudo = deepcopy(trans)
+        pseudo[pseudo > 0.] = 1.
+        pseudo = pseudo/(float(len(seq)+1))
+
+        trans_trained, emi, start = hmm.asMatrices()
+        trans_trained = np.array(trans_trained)+pseudo
+#        print (np.eye(trans_trained.shape[0]))
+#        trans_trained += (np.eye(trans_trained.shape[0])*.01)
+
+        hmm = gh.HMMFromMatrices(
+            symbols,
+            gh.DiscreteDistribution(symbols),
+            trans_trained.tolist(),
+            emi,
+            start
+        )
+
+        hmm.normalize()
 
         return hmm
 
