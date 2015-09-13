@@ -10,6 +10,7 @@ from qsrrep_hmms.qtcc_hmm import QTCCHMM
 from qsrrep_hmms.qtcb_hmm import QTCBHMM
 from qsrrep_hmms.qtcbc_hmm import QTCBCHMM
 from qsrrep_hmms.rcc3_hmm import RCC3HMM
+from qsrrep_hmms.petes_hmm import petes_hmm
 from rep_io import HMMRepRequestAbstractclass, HMMReqResponseCreate, HMMReqResponseSample, HMMReqResponseLogLikelihood
 import tempfile
 import os
@@ -36,7 +37,8 @@ class ProbRepLib(object):
         "qtcc": QTCCHMM,
         "qtcb": QTCBHMM,
         "qtcbc": QTCBCHMM,
-        "rcc3": RCC3HMM
+        "rcc3": RCC3HMM,
+        "mylist": petes_hmm
     }
 
     __hmm_types_active = {}
