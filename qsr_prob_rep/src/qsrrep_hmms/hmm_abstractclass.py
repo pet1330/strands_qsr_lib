@@ -165,19 +165,23 @@ class HMMAbstractclass():
 
         print '\tAdding pseudo transitions...'
         pseudo = deepcopy(trans)
-        pseudo[pseudo > 0.] = 1.
+        pseudo[pseudo > 0.] = .01
         pseudo = pseudo/(float(len(seq)+1))
 
-        trans_trained, emi, start = hmm.asMatrices()
+        trans_trained, emi_trained, start = hmm.asMatrices()
         trans_trained = np.array(trans_trained)+pseudo
 #        print (np.eye(trans_trained.shape[0]))
 #        trans_trained += (np.eye(trans_trained.shape[0])*.01)
+        pseudo = deepcopy(emi)
+        pseudo[pseudo > 0.] = .01
+        pseudo = pseudo/(float(len(seq)+1))
+        emi_trained = np.array(emi_trained)+pseudo  
 
         hmm = gh.HMMFromMatrices(
             symbols,
             gh.DiscreteDistribution(symbols),
             trans_trained.tolist(),
-            emi,
+            emi_trained.tolist(),
             start
         )
 
