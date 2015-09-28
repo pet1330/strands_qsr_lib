@@ -172,7 +172,9 @@ class HMMAbstractclass():
         trans_trained = np.array(trans_trained)+pseudo
 #        print (np.eye(trans_trained.shape[0]))
 #        trans_trained += (np.eye(trans_trained.shape[0])*.01)
-        pseudo = deepcopy(emi)
+        pseudo = np.ones(emi.shape)
+        pseudo = pseudo/pseudo.sum(axis=1)
+        # pseudo = deepcopy(emi)
         pseudo[pseudo > 0.] = .01
         pseudo = pseudo/(float(len(seq)+1))
         emi_trained = np.array(emi_trained)+pseudo  
