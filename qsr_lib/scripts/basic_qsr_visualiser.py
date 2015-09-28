@@ -168,7 +168,7 @@ class qsr_gui():
         sfreq = Slider(axfreq, 'QF', 0.0, 5.0, valinit=0)
         sfreq.on_changed(self.__update)
         randomPos = plt.axes([0.04, 0.25, 0.2, 0.03])
-        button = Button(randomPos, 'Reset', color=axcolor, hovercolor='0.975')
+        button = Button(randomPos, 'Random', color=axcolor, hovercolor='0.975')
         button.on_clicked(self.__randomiseBoxesClicked)
 
         if self.qsr:
